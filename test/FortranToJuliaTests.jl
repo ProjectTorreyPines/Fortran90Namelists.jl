@@ -8,8 +8,6 @@ module Mod
 
 using Test
 
-using Test
-
 using Fortran90Namelists.FortranToJulia
 
 # Test data referenced from: http://www-classes.usc.edu/engr/ce/108/text/fbk01.htm.

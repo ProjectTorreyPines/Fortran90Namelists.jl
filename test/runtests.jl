@@ -3,5 +3,8 @@ using Test
 
 @testset "Fortran90Namelists.jl" begin
     include("FortranToJuliaTests.jl")
+
     include("TokenizeTests.jl")
+
+    include("NamelistTests.jl")
 end

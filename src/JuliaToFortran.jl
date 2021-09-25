@@ -34,9 +34,11 @@ end
 function to_fortran(v::AbstractString)
     return FortranData("'$v'")
 end
-
 function Base.string(s::FortranData)
     return string(s.data)
+end
+function to_fortran(v::Nothing)
+    FortranData("NULL")
 end
 
 end
