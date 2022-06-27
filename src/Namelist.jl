@@ -1,3 +1,5 @@
+using OrderedCollections
+
 function fortran_parse(str)
     fdata = Fortran90Namelists.FortranToJulia.FortranData(str)
     for types in [Int, Float64, Bool, String]
@@ -12,7 +14,7 @@ end
 #  READ  #
 #= ==== =#
 """
-    readnml(filename::String; verbose=false)::Dict
+    readnml(filename::String; verbose=false)::AbstractDict
 
 Parse fortran namelist in given filename and returns data in nested dictionary structure
 
@@ -28,14 +30,14 @@ NOTE: This parser has the following known limitations (which may be fixed in the
 These limitations can easily be seen by running regression tests.
 Still, even with limited functionalites this should cover most common FORTRAN namelist usage.
 """
-function readnml(filename::String; verbose=false)::Dict
+function readnml(filename::String; verbose=false)::AbstractDict
     open(filename, "r") do io
         readnml(io; verbose=verbose)
     end
 end
 
 function readnml(io::IO; verbose=false)
-    data = Dict()
+    data = OrderedDict()
     readnml!(io, data; verbose=verbose)
 end
 
@@ -66,7 +68,7 @@ function readnml!(io, data; verbose=false)
         # open of namelist
         if item[1] == "&"
             if ! (item[2] in keys(h))
-                h[Symbol(item[2])] = Dict()
+                h[Symbol(item[2])] = OrderedDict()
                 h[Symbol(item[2])][:parent] = h
             end
             h = h[Symbol(item[2])]
@@ -120,19 +122,19 @@ end
 #= ===== =#
 
 """
-    writenml(filename::String, data::Dict; verbose=false)::String
+    writenml(filename::String, data::AbstractDict; verbose=false)::String
 
 Write nested dictionary structure as fortran namelist to a given filename
 
 NOTE: For a list of known limitations look at the help of readnml()
 """
-function writenml(filename::String, data::Dict; verbose=false)::String
+function writenml(filename::String, data::AbstractDict; verbose=false)::String
     open(filename, "w") do io
         writenml(io, data; verbose=verbose)
     end
 end
 
-function writenml(io::IO, data::Dict; verbose=false)
+function writenml(io::IO, data::AbstractDict; verbose=false)
     txt = []
 
     for nml in keys(data)
